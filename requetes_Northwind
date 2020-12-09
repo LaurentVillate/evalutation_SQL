@@ -1,0 +1,49 @@
+--1--
+
+SELECT CompanyName AS "Société", ContactName AS "Contact", ContactTitle AS "Fonction", Phone AS "Téléphone"
+FROM CUSTOMERS
+WHERE Country = "France"
+
+--2--
+
+SELECT ProductName AS "Produit", UnitPrice AS "Prix"
+FROM Products
+JOIN Suppliers
+ON Suppliers.SupplierID = Products.SupplierID
+WHERE CompanyName = "Exotic Liquids"
+
+--3--
+
+SELECT CompanyName AS "Fournisseur", COUNT(ProductID) AS "Nbre produits"
+FROM Suppliers
+JOIN Products
+ON Products.SupplierID = Suppliers.SupplierID
+WHERE country = "France"
+GROUP BY CompanyName
+ORDER BY COUNT(ProductID) DESC
+
+
+--4--
+
+SELECT CompanyName AS "Client", COUNT(OrderID) AS "Nbre Commandes"
+FROM Customers 
+JOIN Orders
+ON orders.CustomerID = Customers.CustomerID
+WHERE  Country = "France "
+GROUP BY CompanyName
+HAVING COUNT(OrderID) > 10
+
+--5--
+
+SELECT CompanyName AS "Client", SUM(UnitPrice*Quantity) AS "CA", ANY_VALUE(Country) AS "Pays"
+FROM `order details`
+JOIN orders
+ON orders.OrderID = `order details`.OrderID
+JOIN Customers
+ON Customers.CustomerID = Orders.CustomerID
+GROUP BY 
+CompanyName 
+HAVING SUM(UnitPrice*Quantity) > 30000
+ORDER BY SUM(UnitPrice*Quantity) DESC
+
+--6--
